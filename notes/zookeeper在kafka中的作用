@@ -1,0 +1,14 @@
+1.在Kakfa中扮演的角色
+Kafka将元数据信息保存在Zookeeper中，但是发送给Topic本身的数据是不会发到Zk上的，否则Zk就疯了。
+kafka使用zookeeper来实现动态的集群扩展，不需要更改客户端（producer和consumer）的配置。
+broker会在zookeeper注册并保持相关的元数据（topic，partition信息等）更新。
+而客户端会在zookeeper上注册相关的watcher。一旦zookeeper发生变化，客户端能及时感知并作出相应调整。
+这样就保证了添加或去除broker时，各broker间仍能自动实现负载均衡。
+这里的客户端指的是Kafka的消息生产端(Producer)和消息消费端(Consumer)Producer端使用zookeeper用来"发现"broker列表,
+以及和Topic下每个partition的leader建立socket连接并发送消息。
+也就是说每个Topic的partition是由Lead角色的Broker端使用zookeeper来注册broker信息,
+以及监测partition leader存活性.Consumer端使用zookeeper用来注册consumer信息,其中包括consumer消费的partition列表等,
+同时也用来发现broker列表,并和partition leader建立socket连接,并获取消息.
+2.zookeeper中信息
+![Aaron Swartz](https://upload-images.jianshu.io/upload_images/2779043-ace9980fad0c49a4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1000/format/webp)
+
