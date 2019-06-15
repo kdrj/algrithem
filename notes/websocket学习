@@ -1,0 +1,394 @@
+websocket学习
+(https://www.jianshu.com/p/d79bf8174196)java WebSocket开发入门WebSocket
+
+<dependency>
+   <groupId>javax.websocket</groupId>
+   <artifactId>javax.websocket-api</artifactId>
+   <version>1.1</version>
+   <scope>provided</scope>
+</dependency>
+
+
+import java.io.IOException;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+/** 
+ * @Class: Test
+ * @Description: 简单websocket demo
+ * @author 九风萍舟
+ */
+@ServerEndpoint(value="/websocketTest/{userId}")
+public class Test {
+    private Logger logger = LoggerFactory.getLogger(Test.class);
+    
+    private static String userId;
+    
+    //连接时执行
+    @OnOpen
+    public void onOpen(@PathParam("userId") String userId,Session session) throws IOException{
+        this.userId = userId;
+        logger.debug("新连接：{}",userId);
+    }
+    
+    //关闭时执行
+    @OnClose
+    public void onClose(){
+        logger.debug("连接：{} 关闭",this.userId);
+    }
+    
+    //收到消息时执行
+    @OnMessage
+    public void onMessage(String message, Session session) throws IOException {
+        logger.debug("收到用户{}的消息{}",this.userId,message);
+        session.getBasicRemote().sendText("收到 "+this.userId+" 的消息 "); //回复用户
+    }
+    
+    //连接错误时执行
+    @OnError
+    public void onError(Session session, Throwable error){
+        logger.debug("用户id为：{}的连接发送错误",this.userId);
+        error.printStackTrace();
+    }
+
+}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        websocket Demo---- user000 <br />
+        <input id="text" type="text" /> 
+        <button onclick="send()"> Send </button>   
+        <button   onclick="closeWebSocket()"> Close </button>
+        <div id="message">   </div>
+        
+    <script type="text/javascript">
+     //判断当前浏览器是否支持WebSocket
+      if('WebSocket' in window){
+          websocket = new WebSocket("ws://localhost:8080/Demo/websocketTest/user000");
+          console.log("link success")
+      }else{
+          alert('Not support websocket')
+      }
+      
+      //连接发生错误的回调方法
+      websocket.onerror = function(){
+          setMessageInnerHTML("error");
+      };
+       
+      //连接成功建立的回调方法
+      websocket.onopen = function(event){
+          setMessageInnerHTML("open");
+      }
+       console.log("-----")
+      //接收到消息的回调方法
+      websocket.onmessage = function(event){
+            setMessageInnerHTML(event.data);
+      }
+       
+      //连接关闭的回调方法
+      websocket.onclose = function(){
+          setMessageInnerHTML("close");
+      }
+       
+      //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+      window.onbeforeunload = function(){
+          websocket.close();
+      }
+       
+      //将消息显示在网页上
+      function setMessageInnerHTML(innerHTML){
+          document.getElementById('message').innerHTML += innerHTML + '<br/>';
+      }
+       
+      //关闭连接
+      function closeWebSocket(){
+          websocket.close();
+      }
+       
+      //发送消息
+      function send(){
+          var message = document.getElementById('text').value;
+          websocket.send(message);
+      }
+    </script>
+        
+    </body>
+</html>
+
+
+
+
+(https://www.jianshu.com/p/3398d0230e5f)Sring MVC 模式下使用websocket
+
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-websocket</artifactId>
+    <version>${spring.version}</version>
+</dependency>
+
+
+/**
+ * @Class: WebsocketDemo
+ * @Description:  给所用户所有终端推送消息
+ * @author JFPZ
+ * @date 2017年5月15日 上午21:38:08
+ */
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.PathParam;
+import javax.websocket.server.ServerEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.socket.server.standard.SpringConfigurator;
+
+//websocket连接URL地址和可被调用配置
+@ServerEndpoint(value="/websocketDemo/{userId}",configurator = SpringConfigurator.class)
+public class WebsocketDemo {
+    //日志记录      
+    private Logger logger = LoggerFactory.getLogger(WebsocketDemo.class);
+    //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
+    private static int onlineCount = 0;
+   
+    //记录每个用户下多个终端的连接
+    private static Map<Long, Set<WebsocketDemo>> userSocket = new HashMap<>();
+ 
+    //需要session来对用户发送数据, 获取连接特征userId
+    private Session session;
+    private Long userId;
+   
+    /**
+     * @Title: onOpen
+     * @Description: websocekt连接建立时的操作
+     * @param @param userId 用户id
+     * @param @param session websocket连接的session属性
+     * @param @throws IOException
+     */
+    @OnOpen
+    public void onOpen(@PathParam("userId") Long userId,Session session) throws IOException{
+        this.session = session;
+        this.userId = userId;
+        onlineCount++;
+        //根据该用户当前是否已经在别的终端登录进行添加操作
+        if (userSocket.containsKey(this.userId)) {
+            logger.debug("当前用户id:{}已有其他终端登录",this.userId);
+            userSocket.get(this.userId).add(this); //增加该用户set中的连接实例
+        }else {
+            logger.debug("当前用户id:{}第一个终端登录",this.userId);
+            Set<WebsocketDemo> addUserSet = new HashSet<>();
+            addUserSet.add(this);
+            userSocket.put(this.userId, addUserSet);
+        }
+        logger.debug("用户{}登录的终端个数是为{}",userId,userSocket.get(this.userId).size());
+        logger.debug("当前在线用户数为：{},所有终端个数为：{}",userSocket.size(),onlineCount);
+    }
+   
+    /**
+     * @Title: onClose
+     * @Description: 连接关闭的操作
+     */
+    @OnClose
+    public void onClose(){
+        //移除当前用户终端登录的websocket信息,如果该用户的所有终端都下线了，则删除该用户的记录
+        if (userSocket.get(this.userId).size() == 0) {
+            userSocket.remove(this.userId);
+        }else{
+            userSocket.get(this.userId).remove(this);
+        }
+        logger.debug("用户{}登录的终端个数是为{}",this.userId,userSocket.get(this.userId).size());
+        logger.debug("当前在线用户数为：{},所有终端个数为：{}",userSocket.size(),onlineCount);
+    }
+   
+    /**
+     * @Title: onMessage
+     * @Description: 收到消息后的操作
+     * @param @param message 收到的消息
+     * @param @param session 该连接的session属性
+     */
+    @OnMessage
+    public void onMessage(String message, Session session) {    
+        logger.debug("收到来自用户id为：{}的消息：{}",this.userId,message);
+        if(session ==null)  logger.debug("session null");
+    }
+   
+    /**
+     * @Title: onError
+     * @Description: 连接发生错误时候的操作
+     * @param @param session 该连接的session
+     * @param @param error 发生的错误
+     */
+    @OnError
+    public void onError(Session session, Throwable error){
+        logger.debug("用户id为：{}的连接发送错误",this.userId);
+        error.printStackTrace();
+    }
+   
+  /**
+   * @Title: sendMessageToUser
+   * @Description: 发送消息给用户下的所有终端
+   * @param @param userId 用户id
+   * @param @param message 发送的消息
+   * @param @return 发送成功返回true，反则返回false
+   */
+    public Boolean sendMessageToUser(Long userId,String message){
+        if (userSocket.containsKey(userId)) {
+            logger.debug(" 给用户id为：{}的所有终端发送消息：{}",userId,message);
+            for (WebsocketDemo WS : userSocket.get(userId)) {
+                logger.debug("sessionId为:{}",WS.session.getId());
+                try {
+                    WS.session.getBasicRemote().sendText(message);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    logger.debug(" 给用户id为：{}发送消息失败",userId);
+                    return false;
+                }
+            }
+            return true;
+        }
+        logger.debug("发送错误：当前连接不包含id为：{}的用户",userId);
+        return false;
+    }
+  
+}
+
+/** 
+ * @Class: WebSocketMessageService
+ * @Description:  使用webscoket连接向用户发送信息
+ * @author JFPZ
+ * @date 2017年5月15日 上午20:17:01
+ */
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springside.modules.mapper.JsonMapper;
+import com.hhxk.vrshop.entity.Message;
+import com.hhxk.vrshop.web.webSocket.WebsocketDemo;
+import com.hhxk.vrshop.web.webSocket.WebSocket;
+
+@Service("webSocketMessageService")
+public class WSMessageService {
+    private Logger logger = LoggerFactory.getLogger(WSMessageService.class);
+    //声明websocket连接类
+    private WebsocketDemo websocketDemo = new WebsocketDemo();
+
+    /**
+     * @Title: sendToAllTerminal
+     * @Description: 调用websocket类给用户下的所有终端发送消息
+     * @param @param userId 用户id
+     * @param @param message 消息
+     * @param @return 发送成功返回true，否则返回false
+     */
+    public Boolean sendToAllTerminal(Long userId,String message){   
+        logger.debug("向用户{}的消息：{}",userId,message);
+        if(websocketDemo.sendMessageToUser(userId,message)){
+            return true;
+        }else{
+            return false;
+        }   
+    }           
+}
+
+@Controller
+@RequestMapping("/message")
+public class MessageController extends BaseController{
+    //websocket服务层调用类
+    @Autowired
+    private WSMessageService wsMessageService;
+
+  //请求入口
+    @RequestMapping(value="/TestWS",method=RequestMethod.GET)
+    @ResponseBody
+    public String TestWS(@RequestParam(value="userId",required=true) Long userId,
+        @RequestParam(value="message",required=true) String message){
+        logger.debug("收到发送请求，向用户{}的消息：{}",userId,message);
+        if(wsMessageService.sendToAllTerminal(userId, message)){
+            return "发送成功";
+        }else{
+            return "发送失败";
+        }   
+    }
+}
+
+<!DOCTYPE html>
+<html>
+
+    <head lang="en">
+        <meta charset="UTF-8">
+        <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+        <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+        <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+        <title>webSocket-用户66</title>
+        <script type="text/javascript">
+            $(function() {
+                var websocket;
+                if('WebSocket' in window) {
+                                        console.log("此浏览器支持websocket");
+                    websocket = new WebSocket("ws://127.0.0.1:8080/your-project-name/websocketDemo/66");
+                } else if('MozWebSocket' in window) {
+                    alert("此浏览器只支持MozWebSocket");
+                } else {
+                    alert("此浏览器只支持SockJS");
+                }
+                websocket.onopen = function(evnt) {
+                    $("#tou").html("链接服务器成功!")
+                };
+                websocket.onmessage = function(evnt) {
+                    $("#msg").html($("#msg").html() + "<br/>" + evnt.data);
+                };
+                websocket.onerror = function(evnt) {};
+                websocket.onclose = function(evnt) {
+                    $("#tou").html("与服务器断开了链接!")
+                }
+                $('#send').bind('click', function() {
+                    send();
+                });
+
+                function send() {
+                    if(websocket != null) {
+                        var message = document.getElementById('message').value;
+                        websocket.send(message);
+                    } else {
+                        alert('未与服务器链接.');
+                    }
+                }
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="page-header" id="tou">
+            webSocket多终端聊天测试
+        </div>
+        <div class="well" id="msg"></div>
+        <div class="col-lg">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="发送信息..." id="message">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" id="send" >发送</button>
+                </span>
+            </div>
+        </div>
+    </body>
+
+</html>
