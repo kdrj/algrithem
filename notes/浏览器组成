@@ -1,4 +1,8 @@
-·外壳shell：User Interface（用户界面）、Browser engine（浏览器引擎）、Networking（网络）、UI Backend（UI 后端）、Date Persistence（数据持久化存储） 
+外壳shell：User Interface（用户界面）、
+Browser engine（浏览器引擎）、
+Networking（网络）、
+UI Backend（UI 后端）、
+Date Persistence（数据持久化存储） 
 
 ·用户界面 －包括地址栏、后退/前进按钮、书签目录等，也就是你-所看到的除了页面显示窗口之外的其他部分
 ·浏览器引擎 －可以在用户界面和渲染引擎之间传送指令或在客户端本地缓存中读写数据等，是浏览器中各个部分之间相互通信的核心
