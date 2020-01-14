@@ -1,3 +1,6 @@
+节选自  
+https://www.cnblogs.com/qingyunzong/p/8899715.html
+
 什么是RDD？
 
 RDD（Resilient Distributed Dataset）叫做弹性分布式数据集，是Spark中最基本的数据抽象，它代表一个不可变、可分区、里面的元素可并行计算的集合。
