@@ -19,3 +19,12 @@
 3. 图计算系统
 4. 基于状态（state）的系统 
 5. Streaming 系统
+
+
+
+
+分布式锁的主要实现有哪些？
+数据库
+Memcached（add命令）
+Redis（setnx命令）
+Zookeeper（临时节点）
