@@ -1,0 +1,18 @@
+java 
+八种基本数据类型：byte short int long double float boolean char
+
+javascript
+六中基本数据类型：Object(Array Function Date....) number  String boolean null undefined
+
+python3
+六种标准数据类型：
+不可变数据(
+Number  [int、float、bool、complex]
+String  '',""
+Tuple   (,,,)
+)
+可变数据(
+List   [,,,]
+Dictianory  {:}
+Set         {,,,}
+)
