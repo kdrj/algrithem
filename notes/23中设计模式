@@ -35,7 +35,40 @@
                public void singletonOperation(){
                }
            }
-           
+       
+       
+       public class User {
+    //私有化构造函数
+    private User(){ }
+ 
+    //定义一个静态枚举类
+    static enum SingletonEnum{
+        //创建一个枚举对象，该对象天生为单例
+        INSTANCE;
+        private User user;
+        //私有化枚举的构造函数
+        private SingletonEnum(){
+            user=new User();
+        }
+        public User getInstnce(){
+            return user;
+        }
+    }
+ 
+    //对外暴露一个获取User对象的静态方法
+    public static User getInstance(){
+        return SingletonEnum.INSTANCE.getInstnce();
+    }
+}
+
+public class Test {
+    public static void main(String [] args){
+        System.out.println(User.getInstance());
+        System.out.println(User.getInstance());
+        System.out.println(User.getInstance()==User.getInstance());
+    }
+}
+       
            如何选用:
                    单例对象，占用资源小，不需要延时加载，枚举好于饿汉
                    单例对象，占用资源多，需要延时加载，静态内部类好于懒汉式
