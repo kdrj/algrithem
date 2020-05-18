@@ -5,8 +5,13 @@ Nginx模块分为核心模块，基础模块和第三方模块：
   基础模块:http access模块,http FastCGI模块,Http proxy模块,http rewrite模块。
   第三方模块：Http upstream Request Hash模块,Notice模块,Http access key模块。
 
-
-
+性能优势
+  web服务器：处理静态文件,索引文件,自动索引效率高。
+  代理服务器：快速高效反向代理,提升网站性能。
+  负载均衡器：内部支持Rails和PHP,也可支持HTTP代理服务器，对外进行服务。同时支持简单容错和利用算法进行负载均衡。
+  性能方面:Nginx专门为性能设计，实现注重效率。采用Poll模型，可以支持更多的并发连接，并在大并发时占用很低内存。
+  稳定性方面：采用分阶段资源分配技术，使CPU资源占用率低。
+  高可用性方面:支持热备，启动迅速。
 
 
 
