@@ -1,6 +1,9 @@
-##nginx工作原理
+nginx工作原理
 
-
+Nginx模块分为核心模块，基础模块和第三方模块：
+  核心模块:http模块,event模块,mail模块
+  基础模块:http access模块,http FastCGI模块,Http proxy模块,http rewrite模块。
+  第三方模块：Http upstream Request Hash模块,Notice模块,Http access key模块。
 
 
 
