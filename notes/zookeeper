@@ -1,0 +1,24 @@
+简单的说，zookeeper=文件系统+通知机制。
+
+文件系统
+
+有四种类型的znode：
+
+1、PERSISTENT-持久化目录节点
+
+客户端与zookeeper断开连接后，该节点依旧存在
+
+2、 PERSISTENT_SEQUENTIAL-持久化顺序编号目录节点
+
+客户端与zookeeper断开连接后，该节点依旧存在，只是Zookeeper给该节点名称进行顺序编号
+
+3、EPHEMERAL-临时目录节点
+
+客户端与zookeeper断开连接后，该节点被删除
+
+4、EPHEMERAL_SEQUENTIAL-临时顺序编号目录节点
+
+客户端与zookeeper断开连接后，该节点被删除，只是Zookeeper给该节点名称进行顺序编号
+
+通知机制
+客户端注册监听它关心的目录节点，当目录节点发生变化（数据改变、被删除、子目录节点增加删除）时，zookeeper会通知客户端。
