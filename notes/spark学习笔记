@@ -1,6 +1,9 @@
 Spark学习笔记--Spark在Windows下的环境搭建
 https://www.cnblogs.com/xuliangxing/p/7279662.html
 
+-------------------
+https://www.jianshu.com/p/0792eed2b25d
+-------------------
 Hadoop的MapReduce及Spark SQL等只能进行离线计算，无法满足实时性要求较高的业务需求，例如实时推荐，实时网站性能分析等，流式计算可以解决这些问题，
 spark Streaming就是现在常用的流式计算框架。作为spark的五大核心组件之一，spark Streaming原生地支持多种数据源的接入，而且可以与Spark MLLib、
 Graphx结合起来使用，具有高吞吐量，容错机制，数据可以从Kafka、flume、Twitter、zeroMQ、K inesis或者TCP的端口，同时能够被类似于使用map、reduce、
