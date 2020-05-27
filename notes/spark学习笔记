@@ -1,2 +1,26 @@
 Spark学习笔记--Spark在Windows下的环境搭建
 https://www.cnblogs.com/xuliangxing/p/7279662.html
+
+Hadoop的MapReduce及Spark SQL等只能进行离线计算，无法满足实时性要求较高的业务需求，例如实时推荐，实时网站性能分析等，流式计算可以解决这些问题，
+spark Streaming就是现在常用的流式计算框架。作为spark的五大核心组件之一，spark Streaming原生地支持多种数据源的接入，而且可以与Spark MLLib、
+Graphx结合起来使用，具有高吞吐量，容错机制，数据可以从Kafka、flume、Twitter、zeroMQ、K inesis或者TCP的端口，同时能够被类似于使用map、reduce、
+join和window这种高级函数的算法所处理，最终，被处理过的数据能够被推送到磁盘、数据库。简而言之，Spark Streaming的作用就是实时的将不同的数据源的数据
+经过处理之后将结果输出到外部文件系统。
+
+工作原理
+粗粒度
+Spark Streaming接收到实时数据流，把数据按照指定的时间段切成一片片小的数据块，
+然后把小的数据块传给Spark Engine处理。
+
+细粒度
+接收实时输入数据流，然后将数据拆分成多个batch，比如每收集1秒的数据封装为一个batch，然后将每个batch交给Spark的计算引擎进行处理，
+最后会生产出一个结果数据流，其中的数据，也是由一个一个的batch所组成的。
+
+Spark Streaming提供了一种高级的抽象，叫做DStream，英文全称为Discretized Stream，中文翻译为“离散流”，它代表了一个持续不断的数据流。
+DStream可以通过输入数据源来创建，比如Kafka、Flume、ZMQ和Kinesis；也可以通过对其他DStream应用高阶函数来创建，比如map、reduce、join、window。
+DStream的内部，其实一系列持续不断产生的RDD。RDD是Spark Core的核心抽象，即，不可变的，分布式的数据集。DStream中的每个RDD都包含了一个时间段内的数据。
+
+对DStream应用的算子，比如map，其实在底层会被翻译为对DStream中每个RDD的操作。比如对一个DStream执行一个map操作，会产生一个新的DStream。
+但是，在底层，其实其原理为，对输入DStream中每个时间段的RDD，都应用一遍map操作，然后生成的新的RDD，即作为新的DStream中的那个时间段的一个RDD。
+底层的RDD的transformation操作。
+还是由Spark Core的计算引擎来实现的。Spark Streaming对Spark Core进行了一层封装，隐藏了细节，然后对开发人员提供了方便易用的高层次的API。
