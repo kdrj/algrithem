@@ -30,11 +30,11 @@ mybatis是支持。
 普通SQL查询，存储过程和高级映射的优秀的持久层框架。mybatis消除了几乎所有的JDBC代码和参数的手工设置以及结果集的检索。
 **Mybatis使用简单的xml或者注解来映射原始数据，将接口和java POJOs映射成数据库中的记录**
 
-###orm工具的基本思想
+#orm工具的基本思想
 无论是hibernate,Mybatis都有共同点：
 
- 1. 从配置文件中(通常是XML配置文件中）得到sessionfactory.
- 2. 由sessionfafactory产生session
+ 1. 从配置文件中(通常是XML配置文件中）得到sqlsessionfactory.
+ 2. 由sqlsessionfactory产生session
  3. 在session中完成对数据库的增删改查和事务提交等操作。
  4. 用完之后关闭session.
  5. 在java对象和数据库之间做mapping配置文件（xml配置文件）。
