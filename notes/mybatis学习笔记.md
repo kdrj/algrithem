@@ -1,9 +1,30 @@
 ﻿# mybatis学习笔记
 
 
-标签（空格分隔）： java mybatis
+ java mybatis
 
----
+<!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <!-- 注册sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:config/mybatis-config.xml"/>
+        <property name="typeAliasesPackage" value="com.wch.base.domain"/>
+        <property name="mapperLocations" value="classpath:mapper/*.xml"/>
+    </bean>
+
+    <!-- 配置dao接口扫描，配置sqlSessionTemplate -->
+    <context:component-scan base-package="com.wch.base.mapper"/>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
 
 mybatis是支持。
 普通SQL查询，存储过程和高级映射的优秀的持久层框架。mybatis消除了几乎所有的JDBC代码和参数的手工设置以及结果集的检索。
