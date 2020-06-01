@@ -18,6 +18,12 @@ Kafka解决查询效率的手段之一是将数据文件分段，比如有100条
 用二分查找就可以定位到该Message在哪个段中。
 Kafka为每个分段后的数据文件建立了索引文件，文件名与数据文件的名字是一样的，只是文件扩展名为.index
 
+
+-------------
+https://blog.csdn.net/gududedabai/article/details/80001523
+-------------
+
+
 查看kafka版本命令:  find ./libs/ -name \*kafka_\* | head -1 | grep -o '\kafka[^\n]*' 
 
 1.zookeeper在Kakfa中扮演的角色
