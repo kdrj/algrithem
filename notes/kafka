@@ -6,7 +6,9 @@ partition是以文件的形式存储在文件系统中，比如，创建了一�
 其命名规则为<topic_name>-<partition_id>，里面存储的分别就是这5个partition的数据。
 
 Partition中的每条Message由offset来表示它在这个partition中的偏移量，这个offset不是该Message在partition数据文件中的实际存储位置，而是逻辑上一个值，
-它唯一确定了partition中的一条Message。因此，可以认为offset是partition中Message的id。partition中的每条Message包含了以下三个属性：
+它唯一确定了partition中的一条Message。因此，可以认为offset是partition中Message的id。
+
+partition中的每条Message包含了以下三个属性：
      1.offset
      2.MessageSize
      3.data
