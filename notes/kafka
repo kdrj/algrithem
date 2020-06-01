@@ -41,7 +41,7 @@ body是由N个字节构成的一个消息体，包含了具体的key/value消息
 
 查看kafka版本命令:  find ./libs/ -name \*kafka_\* | head -1 | grep -o '\kafka[^\n]*' 
 
-1.zookeeper在Kakfa中扮演的角色
+<<<<<<<<<<<<<<<   zookeeper在Kakfa中扮演的角色  >>>>>>>>>>>>>>>>>>>>>>>
 Kafka将元数据信息保存在Zookeeper中，但是发送给Topic本身的数据是不会发到Zk上的，否则Zk就疯了。
 kafka使用zookeeper来实现动态的集群扩展，不需要更改客户端（producer和consumer）的配置。
 broker会在zookeeper注册并保持相关的元数据（topic，partition信息等）更新。
