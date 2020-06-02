@@ -1,3 +1,12 @@
+>>>>>>>>>>>>>>>>>>>>>>>>>      kafka创建topic           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+    bin/kafka-topics --zookeeper localhost:2181 --create --topic normal-topic --partitions 2 --replication-factor 1
+
+
+ >>>>>>>>>>>>>>>>>>>>>>>>>>>>>消费者注册到kafka有多种方式<<<<<<<<<<<<<<<<<<<<<<<
+    (1)subscribe:这种方式在新增topic或者partition或者消费者增加或者消费者减少的时候，会进行消费者组内消费者的再平衡。
+    (2)assign:这种方式注册的消费者不会进行rebalance。
+
+
 Kafka中的Message是以topic为基本单位组织的，不同的topic之间是相互独立的。每个topic又可以分成几个不同的partition
 (每个topic有几个partition是在创建topic时指定的)，每个partition存储一部分Message
 
