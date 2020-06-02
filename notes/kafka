@@ -57,3 +57,21 @@ broker会在zookeeper注册并保持相关的元数据（topic，partition信息
 2.zookeeper中信息
 ![Aaron Swartz](2779043-ace9980fad0c49a4.png)
 
+
+
+
+kafka项目启动报错： Error processing condition on org.springframework.boot.autoconfigure.kafka.KafkaAutoCon
+启动时遇见报错
+
+想到spring boot与kafka的兼容问题
+
+原因：spring-boot 我用的是 2.0.0
+
+改成 1.5.6 就可以了
+
+<parent>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-parent</artifactId>
+       <version>1.5.6.RELEASE</version>
+   <relativePath/> <!-- lookup parent from repository -->
+</parent>
