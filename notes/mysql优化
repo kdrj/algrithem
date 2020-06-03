@@ -18,7 +18,9 @@ Mysql版本>=5.5 默认的存储引擎，MySQL推荐使用的存储引擎。支�
 数据：记录行。索引：一种检索机制，也需要一定的空间，就相当于一本字典的目录。
 
 
+Innodb ：数据完整性，并发性处理，擅长更新，删除。
 
+myisam：高速查询及插入。擅长插入和查询。
 
 
 EXPLAIN tbl_name  或  EXPLAIN [EXTENDED] SELECT select_options
