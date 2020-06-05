@@ -1,3 +1,9 @@
+Kafka是分布式发布-订阅消息系统,主要用于处理流式数据。
+
+为什么要用消息队列
+     1.缓冲和削峰  2.解耦和扩展性  3.冗余  4.健壮性  5.异步通信
+
+
 >>>>>>>>>>>>>>>>>>>>>>>>>      kafka创建topic           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     bin/kafka-topics --zookeeper localhost:2181 --create --topic normal-topic --partitions 2 --replication-factor 1
 
