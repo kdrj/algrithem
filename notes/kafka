@@ -4,6 +4,20 @@ Kafka是分布式发布-订阅消息系统,主要用于处理流式数据。
      1.缓冲和削峰  2.解耦和扩展性  3.冗余  4.健壮性  5.异步通信
 
 
+ISR:In-Sync Replicas 副本同步队列
+AR:Assigned Replicas 所有副本
+
+broker 是消息的代理
+producer : 生产者
+consumer : 消费者
+Producers往Brokers里面的指定Topic中写消息，Consumers从Brokers里面拉取指定Topic的消息，broker在中间起到一个代理保存消息的中转站。
+
+kafka中的 zookeeper 起到什么作用
+zookeeper 是一个分布式的协调组件，早期版本的kafka用zk做meta信息存储，consumer的消费状态，group的管理以及 offset的值。
+考虑到zk本身的一些因素以及整个架构较大概率存在单点问题，新版本中逐渐弱化了zookeeper的作用。新的consumer使用了kafka内部的group coordination协议，
+也减少了对zookeeper的依赖。但是broker依然依赖于ZK，zookeeper 在kafka中还用来选举controller 和 检测broker是否存活等等
+
+
 >>>>>>>>>>>>>>>>>>>>>>>>>      kafka创建topic           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     bin/kafka-topics --zookeeper localhost:2181 --create --topic normal-topic --partitions 2 --replication-factor 1
 
