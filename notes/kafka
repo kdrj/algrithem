@@ -20,7 +20,10 @@ zookeeper 是一个分布式的协调组件，早期版本的kafka用zk做meta�
 
 >>>>>>>>>>>>>>>>>>>>>>>>>      kafka创建topic           <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
     bin/kafka-topics --zookeeper localhost:2181 --create --topic normal-topic --partitions 2 --replication-factor 1
-
+ 生产者：
+    ./bin/kafka-console-producer.sh --broker-list ip:6667 --topic topicname
+ 消费者
+    ./bin/kafka-console-consumer.sh --bootstrap-server ip:6667,ip:6667.. --topic topicname --from-beginning
 
  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>消费者注册到kafka有多种方式<<<<<<<<<<<<<<<<<<<<<<<
     (1)subscribe:这种方式在新增topic或者partition或者消费者增加或者消费者减少的时候，会进行消费者组内消费者的再平衡。
