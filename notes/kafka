@@ -25,8 +25,10 @@ zookeeper 是一个分布式的协调组件，早期版本的kafka用zk做meta�
  消费者
     ./bin/kafka-console-consumer.sh --bootstrap-server ip:6667,ip:6667.. --topic topicname --from-beginning
 
-    对于老的消费者，由--zookeeper参数设置；对于新的消费者，由--bootstrap-server参数设置
-    如果使用了--zookeeper参数,那么consumer的信息将会存放在zk之中
+    [对于老的消费者，由--zookeeper参数设置；对于新的消费者，由--bootstrap-server参数设置]
+    [如果使用了--zookeeper参数,那么consumer的信息将会存放在zk之中]
+    [对于console生产者，--broker-list参数指定了所使用的broker]
+    
     
  >>>>>>>>>>>>>>>>>>>>>>>>>>>>>消费者注册到kafka有多种方式<<<<<<<<<<<<<<<<<<<<<<<
     (1)subscribe:这种方式在新增topic或者partition或者消费者增加或者消费者减少的时候，会进行消费者组内消费者的再平衡。
