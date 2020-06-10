@@ -1,0 +1,96 @@
+设计并实现了一个最近最少使用（LRU）缓存的数据结构，它应该支持以下操作：get和set。
+get(key)——如果键存在于缓存中，则获得键值（总是正数），否则返回-1。
+set(key, value)——如果键不存在，则设置或插入值。当缓存达到其容量时，应在插入新项之前使最近最少使用的项无效。
+
+分析：LRU缓存可使用一个HashMap和双向链表实现。HashMap，使得get的时间是O（1）；双向链表使节点添加/删除操作O（1）。
+
+
+
+
+
+
+
+class Node{
+    int key;
+    int value;
+    Node pre;
+    Node next;
+ 
+    public Node(int key, int value){
+        this.key = key;
+        this.value = value;
+    }
+}
+
+
+
+public class LRUCache {
+    int capacity;
+    HashMap<Integer, Node> map = new HashMap<Integer, Node>();
+    Node head=null;
+    Node end=null;
+ 
+    public LRUCache(int capacity) {
+        this.capacity = capacity;
+    }
+ 
+    public int get(int key) {
+        if(map.containsKey(key)){
+            Node n = map.get(key);
+            remove(n);
+            setHead(n);
+            return n.value;
+        }
+ 
+        return -1;
+    }
+ 
+    public void remove(Node n){
+        if(n.pre!=null){
+            n.pre.next = n.next;
+        }else{
+            head = n.next;
+        }
+ 
+        if(n.next!=null){
+            n.next.pre = n.pre;
+        }else{
+            end = n.pre;
+        }
+ 
+    }
+ 
+    public void setHead(Node n){
+        n.next = head;
+        n.pre = null;
+ 
+        if(head!=null)
+            head.pre = n;
+ 
+        head = n;
+ 
+        if(end ==null)
+            end = head;
+    }
+ 
+    public void set(int key, int value) {
+        if(map.containsKey(key)){
+            Node old = map.get(key);
+            old.value = value;
+            remove(old);
+            setHead(old);
+        }else{
+            Node created = new Node(key, value);
+            if(map.size()>=capacity){
+                map.remove(end.key);
+                remove(end);
+                setHead(created);
+ 
+            }else{
+                setHead(created);
+            }    
+ 
+            map.put(key, created);
+        }
+    }
+}
