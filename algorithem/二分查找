@@ -1,3 +1,5 @@
+必须保证被查找的数据是按顺序排列的，我们才能实现二分查找
+
 public class Test {
   public static void main(String[] args) {
       // 准备好一个有序的被查找数组
