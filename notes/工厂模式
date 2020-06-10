@@ -1,0 +1,278 @@
+1.简单工厂模式
+主要角色
+  1.工厂
+  2.抽象产品
+  3.具体产品
+ 
+ 
+ /**
+ *  抽象产品
+ *  描述产品的公共接口
+ */
+abstract  class Product {
+    //产品介绍
+    abstract void intro();
+}
+
+/**
+ * 具体产品A
+ * （可以看成是一种饮料：可乐）
+ */
+public class AProduct extends Product{
+    @Override
+    void intro() {
+        System.out.println("可乐");
+    }
+}
+
+/**
+ * @具体产品B
+ * @（可以看成是一种饮料：奶茶）
+ */
+public class BProduct extends Product{
+    @Override
+    void intro() {
+        System.out.println("奶茶");
+    }
+}
+
+/**
+ * 具体产品C
+ * （可以看成是一种饮料：咖啡）
+ */
+public class CProduct extends Product{
+    @Override
+    void intro() {
+        System.out.println("咖啡");
+    }
+}
+
+
+/**
+ * 工厂
+ * 负责实现创建所有实例的内部逻辑，并提供一个外界调用的方法，创建所需的产品对象。
+ */
+public class Factory {
+    /**
+     * 供外界调用的方法
+     * （可以看成是对外提供的三种按钮）
+     * @param type 
+     * @return 产品实例
+     */
+    public static Product getProduct(String type) {
+        switch (type) {
+            case "A":
+                return new AProduct();
+            case "B":
+                return new BProduct();
+            case "C":
+                return new CProduct();
+            default:
+                return null;
+        }
+    }
+}
+
+测试
+public class Test {
+    public static void main(String[] args) {
+        //创建具体的工厂
+        Factory factory = new Factory();
+        //根据传入的参数生产不同的产品实例
+        //(按下不同的按钮，获取饮料)
+        Product A = Factory.getProduct("A");
+        A.intro();
+        Product B = Factory.getProduct("B");
+        B.intro();
+        Product C = Factory.getProduct("C");
+        C.intro();
+    }
+}
+
+
+2.工厂方法模式
+主要角色
+抽象工厂：描述具体工厂的公共接口
+具体工厂：描述具体工厂，创建产品的实例，供外界调用
+抽象产品：负责描述产品的公共接口
+具体产品：描述生产的具体产品
+
+
+产品
+
+/**
+ *   抽象产品
+ */
+abstract class Product {
+    //产品介绍
+    abstract void intro();
+}
+
+/**
+ * 具体产品A
+ */
+public class ProductA extends Product{
+    @Override
+    void intro() {
+        System.out.println("饮料A");
+    }
+}
+
+/**
+ * 具体产品B
+ */
+public class ProductB extends Product{
+    @Override
+    void intro() {
+        System.out.println("饮料B");
+    }
+}
+
+
+工厂
+
+/**
+ *    抽象工厂
+ */
+abstract class Factory {
+    //生产产品
+    abstract Product getProduct();
+}
+
+/**
+ * 具体工厂A
+ * 负责具体的产品A生产
+ */
+public class FactoryA extends Factory{
+    @Override
+    Product getProduct() {
+        return new ProductA();
+    }
+}
+
+/**
+ * @具体工厂B
+ * 负责具体的产品B生产
+ */
+public class FactoryB extends Factory{
+    @Override
+    Product getProduct() {
+        return new ProductB();
+    }
+}
+
+测试
+public class Test {
+    public static void main(String[] args) {
+        //创建具体的工厂
+        FactoryA factoryA = new FactoryA();
+        //生产相对应的产品
+        factoryA.getProduct().intro();
+        FactoryB factoryB = new FactoryB();
+        factoryB.getProduct().intro();
+    }
+}
+
+3.抽象工厂模式
+
+主要对象
+抽象工厂：描述具体工厂的公共接口
+具体工厂：描述具体工厂，创建产品的实例，供外界调用
+抽象产品族：描述抽象产品的公共接口
+抽象产品：描述具体产品的公共接口
+具体产品：具体产品
+
+产品
+
+/**
+ * 抽象产品族 (食品)
+ */
+abstract class Product {
+    //产品介绍
+    abstract void intro();
+}
+
+/**
+ * 抽象产品  (饮料)
+ */
+abstract class ProductA extends Product{
+    @Override
+    abstract void intro();
+}
+
+/**
+ * 抽象产品  (零食)
+ */
+abstract class ProductB extends Product{
+    @Override
+    abstract void intro();
+}
+
+/**
+ * 具体产品  (矿泉水)
+ */
+public  class ProductAa extends ProductA{
+    @Override
+    void intro() {
+        System.out.println("矿泉水");
+    }
+}
+
+/**
+ * 抽象产品  (面包)
+ */
+public class ProductBb extends ProductB{
+    @Override
+    void intro() {
+        System.out.println("面包");
+    }
+}
+
+
+
+
+工厂
+
+
+/**
+ * @ Factory.java
+ * 抽象工厂
+ */
+abstract class Factory {
+    //生产饮料
+    abstract Product getProductA();
+    //生产零食
+    abstract Product getProductB();
+}
+
+/**
+ * @ FactoryA.java
+ * 具体工厂A
+ * 负责具体的A类产品生产
+ */
+public class FactoryA extends Factory{
+    @Override
+    Product getProductA() {
+        //生产矿泉水
+        return new ProductAa();
+    }
+    @Override
+    Product getProductB() {
+        //生产面包
+        return new ProductBb();
+    }
+}
+
+测试
+
+public class Test {
+    public static void main(String[] args) {
+        //创建零食售卖机（具体工厂），
+        FactoryA factoryA = new FactoryA();
+        //获取矿泉水与面包（具体产品）
+        factoryA.getProductA().intro();
+        factoryA.getProductB().intro();
+    }
+}
+
+https://www.jianshu.com/p/d951ac56136e
