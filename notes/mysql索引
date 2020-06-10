@@ -49,3 +49,6 @@ SELECT COUNT(DISTINCT name),COUNT(DISTINCT gender) FROM user;
 
 回表次数太多会严重影响SQL性能，如果回表次数太多，就不应该走索引扫描，应该直接走全表扫描。
 EXPLAIN命令结果中的Using Index意味着不会回表，通过索引就可以获得主要的数据。Using Where则意味着需要回表取数据。
+
+
+https://cloud.tencent.com/developer/news/362898
