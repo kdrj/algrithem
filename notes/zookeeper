@@ -62,3 +62,13 @@ Zookeeper作为一个集群提供一致的数据服务，自然，它要在所�
 -------------------
 https://blog.csdn.net/lingbo229/article/details/81052078
 -------------------
+
+
+Zookeeper 使用场景
+
+应用	      场景描述	使用示例	备注
+1.命名服务	服务注册、服务发现功能	dubbo	
+配置服务	利用ZK的树形数据存储保持配置信息		
+分布式锁	利用ZK临时顺序节点， 实现资源占用功能	分布式锁	
+专用服务	一些开源项目对zk的命名服务、配置服务等需求	kafka hadoop redis	
+选主	      分布式服务需要一个leader和多个follower（或者backup），zk临时节点来完成选主功能	   kafka 数据挖掘 抓取服务	
