@@ -1,0 +1,1 @@
+<dubbo:provider proxy="jdk" />或<dubbo:consumer proxy="jdk" />  默认情况下使用Javassist来进行动态代理。
