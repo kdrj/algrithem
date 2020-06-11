@@ -1,3 +1,5 @@
 @ComponentScan    指定要扫描的包（使用@ComponentScan 的 valule 属性来配置）
 @MapperScan       指定basePackages， 扫描mybatis Mapper接口类,另外一种方式是用@Mapper注解
 @ImportResource   实现xml配置的装载
+@Async            @Async所修饰的函数不要定义为static类型
+@EnableAsync      开启多线程
