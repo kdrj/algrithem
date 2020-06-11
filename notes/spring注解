@@ -1,0 +1,2 @@
+@ComponentScan    指定要扫描的包（使用@ComponentScan 的 valule 属性来配置）
+@ImportResource   实现xml配置的装载
