@@ -42,6 +42,10 @@ volatile关键字不一定能够保证线程安全的问题，其实，在大多
 关键字synchronized可以保证在同一时刻，只有一个线程可以执行某个方法或某个代码块，
 同时synchronized可以保证一个线程的变化可见（可见性），即可以代替volatile。
 
+synchronized的cpu原语级别实现方式
+synchronized代码块主要是由monitorenter和monitorexit这两个原语来实现同步的。当线程进入monitorenter获得执行代码的权利时，其他线程就不能执行里面的
+代码，直到锁owner线程执行monitorexit释放锁后，其他线程才可以竞争获得锁。
+
 synchronized的三种应用方式
     1. 修饰实例方法，作用于当前实例加锁，进入同步代码前要获得当前实例的锁。
     2. 修饰静态方法，作用于当前类对象加锁，进入同步代码前要获得当前类对象的锁。
